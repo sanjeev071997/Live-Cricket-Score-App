@@ -69,6 +69,7 @@ const CricketScore = () => {
   };
 
   return (
+   <>
     <div className="main-container">
       <div className="searchBar">
         <input
@@ -91,8 +92,8 @@ const CricketScore = () => {
         </div>
       ) : (
         <div className="container">
-          {paginatedData.length > 0 ? (
-            paginatedData.map((curVal, index) => (
+          {paginatedData?.length > 0 ? (
+            paginatedData?.map((curVal, index) => (
               <div className="card" key={index}>
                 <h3>{curVal.series}</h3>
                 <h3>{curVal.matchType}</h3>
@@ -117,7 +118,7 @@ const CricketScore = () => {
         </div>
       )}
 
-      {filteredData.length > 0 && !loading && (
+      {filteredData?.length > 0 && !loading && (
         <div className="pagination">
           <button
             onClick={() => handlePagination(currentPage - 1)}
@@ -157,6 +158,7 @@ const CricketScore = () => {
         </div>
       )}
     </div>
+   </>
   );
 };
 

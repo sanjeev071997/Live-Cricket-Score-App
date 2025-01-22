@@ -1,4 +1,3 @@
-// src/pages/PrivacyPolicy.js
 import React from 'react';
 import './PrivacyPolicy.css'; // Import the CSS file for styling
 import Navbar from '../Component/Navbar';
