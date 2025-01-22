@@ -3,6 +3,7 @@ import circle from "./circle.png";
 import spinner from "./spinner.gif";
 
 const CricketScore = () => {
+  const apiUrl = process.env.REACT_APP_API_URL;
   const [data, setData] = useState([]);
   const [inputData, setInputData] = useState("");
   const [search, setSearch] = useState("");
@@ -13,10 +14,7 @@ const CricketScore = () => {
   const getData = async () => {
     setLoading(true);
     try {
-      const response = await fetch(
-        // "https://api.cricapi.com/v1/cricScore?apikey=0328c2e4-976d-4f98-a46c-16b370991bbc" 
-        "https://api.cricapi.com/v1/cricScore?apikey=9b1921c5-88c2-426c-a812-cc491f063b05" // my api 
-      );
+      const response = await fetch(`${apiUrl}`);
       const result = await response.json();
       setData(result.data);
     } catch (err) {
@@ -57,6 +55,18 @@ const CricketScore = () => {
     startIndex,
     startIndex + itemsPerPage
   );
+
+  const pageNumbers = [];
+  for (let i = 1; i <= totalPages; i++) {
+    pageNumbers.push(i);
+  }
+
+  const visiblePages = (pageNumbers) => {
+    const range = 3;
+    const start = Math.max(0, currentPage - range);
+    const end = Math.min(totalPages, currentPage + range);
+    return pageNumbers.slice(start, end);
+  };
 
   return (
     <div className="main-container">
@@ -115,15 +125,29 @@ const CricketScore = () => {
           >
             Previous
           </button>
-          {Array.from({ length: totalPages }, (_, index) => (
+
+          {currentPage > 4 && (
+            <button onClick={() => handlePagination(1)}>1</button>
+          )}
+          {currentPage > 5 && <span>...</span>}
+
+          {visiblePages(pageNumbers).map((page) => (
             <button
-              key={index}
-              onClick={() => handlePagination(index + 1)}
-              className={currentPage === index + 1 ? "active" : ""}
+              key={page}
+              onClick={() => handlePagination(page)}
+              className={currentPage === page ? "active" : ""}
             >
-              {index + 1}
+              {page}
             </button>
           ))}
+
+          {currentPage < totalPages - 4 && <span>...</span>}
+          {currentPage < totalPages - 3 && (
+            <button onClick={() => handlePagination(totalPages)}>
+              {totalPages}
+            </button>
+          )}
+
           <button
             onClick={() => handlePagination(currentPage + 1)}
             disabled={currentPage === totalPages}
